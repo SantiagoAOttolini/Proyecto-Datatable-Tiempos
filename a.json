@@ -1,0 +1,7 @@
+{
+  "data": [
+    {
+      "json_log": "{\"fase\": \"ProcessMessage\", \"nodo\": \"1\", \"Inner\": [{\"fase\": \"R\", \"nodo\": \"1.1\", \"Inner\": [], \"tiempo\": 0.11145639419555664, \"descripcion\": \"Lectura mensaje\"}, {\"fase\": \"T\", \"nodo\": \"1.2\", \"Inner\": [{\"fase\": \"T.1\", \"nodo\": \"1.2.1\", \"Inner\": [], \"tiempo\": 0.0006937980651855469, \"descripcion\": \"Recepcion de datos,definicion tipo de mensaje.\"}, {\"fase\": \"T.2\", \"nodo\": \"1.2.2\", \"Inner\": [], \"tiempo\": 0.43952465057373047, \"descripcion\": \"Comunicacion con el GD.\"}, {\"fase\": \"T2\", \"Inner\": [{\"fase\": \"T2\", \"tiempo\": 0.17295050621032715, \"descripcion\": \"POST;https://vmi351008.contaboserver.net:2021/api/DialogMessages\"}], \"tiempo\": 1600271517.229762, \"descripcion\": \"\"}, {\"fase\": \"T.3\", \"nodo\": \"1.2.4\", \"Inner\": [], \"tiempo\": 0.0007908344268798828, \"descripcion\": \"Tratado minimo de mensaje saliente, y guardado de datos del contacto\"}], \"tiempo\": 0.44101500511169434, \"descripcion\": \"Procesado msg\"}, {\"fase\": \"W\", \"nodo\": \"1.3\", \"Inner\": [], \"tiempo\": 0.8308169841766357, \"descripcion\": \"Escritura msg scrapper\"}], \"tiempo\": 1.3887622356414795, \"descripcion\": \"leer,procesar y enviar msg\"}"
+    }
+  ]
+}
