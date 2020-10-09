@@ -1,7 +1,7 @@
-window.onerror = function(error) {
+window.onerror = function (error) {
   alertify.error("Se detecto un error");
 };
-    
+
 var flattenObject = function (ob) {
   var toReturn = {};
 
@@ -57,7 +57,12 @@ var defTableSettings = {
           escritura: jsparsed.Inner.find((element) => element.fase == "W")
             .tiempo,
           tarea: jsparsed.Inner.find((element) => element.fase == "T").tiempo,
-         /* tareaT1: jsparsed.Inner.find((element) => element.Inner.fase == "T.1").tiempo  */
+          tareaT1: jsparsed.Inner[0].Inner[0].tiempo,
+          tareaT2: jsparsed.Inner[0].Inner[1].tiempo,
+          tareaT3: jsparsed.Inner[0].Inner[2].tiempo,
+          tareaT21: jsparsed.Inner[0].Inner[1].Inner[0].tiempo,
+          tareaT22: jsparsed.Inner[0].Inner[1].Inner[1].tiempo,
+          tareaT23: jsparsed.Inner[0].Inner[1].Inner[2].tiempo,
         };
       });
       return filas;
@@ -87,10 +92,7 @@ var defTableSettings = {
         "<button  class='btnCollapseTotal rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
       data: "tiempo",
       render: function (data, type, row) {
-        return (
-          data.toFixed(4) +
-          "<button class='btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindow'></button>"
-        );
+        return data.toFixed(4);
       },
     },
     {
@@ -100,28 +102,91 @@ var defTableSettings = {
       render: function (data, type, row) {
         return data.toFixed(4);
       },
+      className: "text-primary",
     },
     {
       visible: false,
-      title: "Tarea",
+      title:
+        "Tarea" +
+        "<button class='btnExpandTask rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
+        "<button  class='btnCollapseTask invisible rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
+      className: "text-danger",
     },
-    /* { 
-      title: "Tarea",
+    {
+      visible: false,
+      title: "Tarea T.1",
       data: "tareaT1",
       render: function (data, type, row) {
-        return data;
+        return data.toFixed(4);
       },
-    }, */
+      className: "text-danger",
+    },
+    {
+      visible: false,
+      title:
+        "Tarea T.2" +
+        "<button class='btnExpandTask2 rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
+        "<button  class='btnCollapseTask2 invisible rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
+      data: "tareaT2",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+
+    {
+      visible: false,
+      title: "Tarea T.2.1",
+      data: "tareaT21",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      visible: false,
+      title: "Tarea T.2.2",
+      data: "tareaT22",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      visible: false,
+      title: "Tarea T.2.3",
+      data: "tareaT23",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      visible: false,
+      title: "Tarea T.3",
+      data: "tareaT3",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
     {
       visible: false,
       title: "Escritura",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
+      },
+      className: "text-success",
+    },
+    {
+      title: "Accion",
+      render: function (data, type, row) {
+        return "<button class='btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindow'></button>";
       },
     },
   ],
@@ -157,14 +222,13 @@ $(document).ready(function () {
     "click",
     "button.btnExpandTotal",
     function () {
-
       $(this).toggleClass("fa-minus btnCollapseTotal");
       table.column(4).visible(true);
       table.column(5).visible(true);
-      table.column(6).visible(true);
+      table.column(12).visible(true);
     }
   );
-  
+
   $("#total thead, #average thead").on(
     "click",
     "button.btnCollapseTotal",
@@ -172,8 +236,43 @@ $(document).ready(function () {
       table.column(4).visible(false);
       table.column(5).visible(false);
       table.column(6).visible(false);
+      table.column(7).visible(false);
+      table.column(8).visible(false);
+      table.column(9).visible(false);
+      table.column(10).visible(false);
+      table.column(11).visible(false);
+      table.column(12).visible(false);
     }
   );
+
+  $("#total thead").on("click", "button.btnExpandTask", function () {
+    $(this).toggleClass("fa-minus btnCollapseTask");
+    table.column(6).visible(true);
+    table.column(7).visible(true);
+    table.column(11).visible(true);
+  });
+
+  $("#total thead").on("click", "button.btnCollapseTask", function () {
+    table.column(6).visible(false);
+    table.column(7).visible(false);
+    table.column(8).visible(false);
+    table.column(9).visible(false);
+    table.column(10).visible(false);
+    table.column(11).visible(false);
+  });
+
+  $("#total thead").on("click", "button.btnExpandTask2", function () {
+    $(this).toggleClass("fa-minus btnCollapseTask2");
+    table.column(8).visible(true);
+    table.column(9).visible(true);
+    table.column(10).visible(true);
+  });
+
+  $("#total thead").on("click", "button.btnCollapseTask2", function () {
+    table.column(8).visible(false);
+    table.column(9).visible(false);
+    table.column(10).visible(false);
+  });
 
   $("#total,#average, body").on("click", "button.btnFilter", function () {
     table.ajax.reload(null, false);
@@ -225,6 +324,9 @@ var defTableSettingsAverage = {
       console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
     },
   },
+  /* searching: false,
+  paging: false,
+  info: false, */
   columns: [
     {
       title: "Tiempo promedio",
@@ -235,27 +337,31 @@ var defTableSettingsAverage = {
     },
     {
       visible: false,
-      title: "Lectura",
+      title: "Lectura promedio",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
+      className: "text-primary",
     },
+
     {
       visible: false,
-      title: "Tarea",
+      title: "Tarea promedio",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
+      className: "text-danger",
     },
     {
       visible: false,
-      title: "Escritura",
+      title: "Escritura promedio",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
+      className: "text-success",
     },
   ],
 };
@@ -314,11 +420,7 @@ $(document).ready(function () {
         datasets: [
           {
             label: "Tiempos",
-            data: [
-              tableAverage.column(1).data()[1],
-              tableAverage.column(2).data()[1],
-              tableAverage.column(3).data()[1],
-            ],
+            data: [],
             //backgroundColor:'green',
             backgroundColor: [
               "rgba(255, 99, 132, 0.6)",
