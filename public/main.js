@@ -47,11 +47,11 @@ var defTableSettings = {
       var filas = json.data.map(function (v) {
         jsparsed = JSON.parse(v.json_log);
         flattened = flattenObject(jsparsed);
-
+        
         return {
           canal: v.canal,
           usr: v.usr_receptor,
-          fecha: v.date,
+          fecha: v.date.replace("GMT",""),
           tiempo: jsparsed.tiempo,
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
           escritura: jsparsed.Inner.find((element) => element.fase == "W")
@@ -74,14 +74,17 @@ var defTableSettings = {
 
   columns: [
     {
+      width: "10%",
       title: "Canal",
       data: "canal",
     },
     {
+      width: "10%",
       title: "Celular",
       data: "usr",
     },
     {
+      width: "10%",
       title: "Fecha",
       data: "fecha",
     },
@@ -186,7 +189,7 @@ var defTableSettings = {
     {
       title: "Accion",
       render: function (data, type, row) {
-        return "<button class='btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindow'></button>";
+        return "<button class='btnChart btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindow'></button>";
       },
     },
   ],
@@ -305,12 +308,17 @@ var defTableSettingsAverage = {
       var countRow = $("#total").DataTable().rows().count();
       columnTiempo = $("#total").DataTable().column(3).data().sum();
       columnLectura = $("#total").DataTable().column(4).data().sum();
-      columnEscritura = $("#total").DataTable().column(5).data().sum();
-      columnTarea = $("#total").DataTable().column(6).data().sum();
-      var filas = json.data.map(function (v) {
-        jsparsed = JSON.parse(v.json_log);
-        flattened = flattenObject(jsparsed);
+      columnEscritura = $("#total").DataTable().column(12).data().sum();
+      columnTarea = $("#total").DataTable().column(5).data().sum();
 
+      var filas = json.data.slice(0, 1).map(function () {
+        if (isNaN(columnTiempo, columnLectura, columnEscritura, columnTarea))
+          parceFloat(
+            "columnTiempo",
+            "columnLectura",
+            "columnEscritura",
+            "columnTarea"
+          );
         return {
           tiempo: columnTiempo / countRow,
           lectura: columnLectura / countRow,
@@ -324,11 +332,21 @@ var defTableSettingsAverage = {
       console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
     },
   },
-  /* searching: false,
+  searching: false,
+  info: false,
   paging: false,
-  info: false, */
   columns: [
     {
+      visible: false,
+      width: "30%",
+      title: "",
+      render: function (data, type, row) {
+        return "";
+      },
+    },
+
+    {
+      width: "23%",
       title: "Tiempo promedio",
       data: "tiempo",
       render: function (data, type, row) {
@@ -337,6 +355,7 @@ var defTableSettingsAverage = {
     },
     {
       visible: false,
+      width: "10%",
       title: "Lectura promedio",
       data: "lectura",
       render: function (data, type, row) {
@@ -347,6 +366,7 @@ var defTableSettingsAverage = {
 
     {
       visible: false,
+      width: "17%",
       title: "Tarea promedio",
       data: "tarea",
       render: function (data, type, row) {
@@ -362,6 +382,14 @@ var defTableSettingsAverage = {
         return data.toFixed(4);
       },
       className: "text-success",
+    },
+    {
+      visible: false,
+      width: "9%",
+      title: "",
+      render: function (data, type, row) {
+        return "";
+      },
     },
   ],
 };
@@ -389,9 +417,12 @@ $(document).ready(function () {
     "button.btnExpandTotal",
     function () {
       $(this).toggleClass("fa-minus btnCollapseTotal");
+      tableAverage.column(0).visible(true);
       tableAverage.column(1).visible(true);
       tableAverage.column(2).visible(true);
       tableAverage.column(3).visible(true);
+      tableAverage.column(4).visible(true);
+      tableAverage.column(5).visible(true);
     }
   );
 
@@ -399,14 +430,17 @@ $(document).ready(function () {
     "click",
     "button.btnCollapseTotal",
     function () {
-      tableAverage.column(1).visible(false);
+      tableAverage.column(0).visible(false);
       tableAverage.column(2).visible(false);
       tableAverage.column(3).visible(false);
+      tableAverage.column(4).visible(false);
+      tableAverage.column(5).visible(false);
     }
   );
 
   $("#modalWindow, body").on("shown.bs.modal", function () {
     let myChart = document.getElementById("myChart").getContext("2d");
+    Chart.controllers.MyType = Chart.DatasetController.extend({});
 
     // Global Options
     Chart.defaults.global.defaultFontFamily = "Lato";
@@ -420,7 +454,7 @@ $(document).ready(function () {
         datasets: [
           {
             label: "Tiempos",
-            data: [],
+
             //backgroundColor:'green',
             backgroundColor: [
               "rgba(255, 99, 132, 0.6)",
