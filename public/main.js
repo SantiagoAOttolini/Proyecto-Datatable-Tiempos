@@ -47,11 +47,11 @@ var defTableSettings = {
       var filas = json.data.map(function (v) {
         jsparsed = JSON.parse(v.json_log);
         flattened = flattenObject(jsparsed);
-        
+
         return {
           canal: v.canal,
           usr: v.usr_receptor,
-          fecha: v.date.replace("GMT",""),
+          fecha: v.date.replace("GMT", ""),
           tiempo: jsparsed.tiempo,
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
           escritura: jsparsed.Inner.find((element) => element.fase == "W")
@@ -226,6 +226,7 @@ $(document).ready(function () {
     "button.btnExpandTotal",
     function () {
       $(this).toggleClass("fa-minus btnCollapseTotal");
+
       table.column(4).visible(true);
       table.column(5).visible(true);
       table.column(12).visible(true);
@@ -438,7 +439,14 @@ $(document).ready(function () {
     }
   );
 
-  $("#modalWindow, body").on("shown.bs.modal", function () {
+  $("#modalWindow, body").on("shown.bs.modal", function (e) {
+    var clickedBtn = $(e.relatedTarget);
+    var tr = $(clickedBtn).closest("tr");
+    var dataLec = table.row(tr).data()["lectura"];
+    var dataEsc = table.row(tr).data()["escritura"];
+    var dataTar = table.row(tr).data()["tarea"];
+    
+
     let myChart = document.getElementById("myChart").getContext("2d");
     Chart.controllers.MyType = Chart.DatasetController.extend({});
 
@@ -448,22 +456,21 @@ $(document).ready(function () {
     Chart.defaults.global.defaultFontColor = "#777";
 
     let massPopChart = new Chart(myChart, {
-      type: "pie", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      type: "bar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
       data: {
         labels: ["Lectura", "Tarea", "Escritura"],
         datasets: [
           {
             label: "Tiempos",
-
+            data: [dataLec, dataTar, dataEsc],
             //backgroundColor:'green',
             backgroundColor: [
+              "rgba(37, 179, 179, 0.6)",
               "rgba(255, 99, 132, 0.6)",
-              "rgba(54, 162, 235, 0.6)",
-              "rgba(255, 206, 86, 0.6)",
-              "rgba(75, 192, 192, 0.6)",
-              "rgba(153, 102, 255, 0.6)",
-              "rgba(255, 159, 64, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+              "rgba(37, 179, 179, 0.6)",
               "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
             ],
             borderWidth: 1,
             borderColor: "#777",
@@ -486,7 +493,7 @@ $(document).ready(function () {
         },
         layout: {
           padding: {
-            left: 50,
+            left: 0,
             right: 0,
             bottom: 0,
             top: 0,
