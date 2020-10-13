@@ -55,6 +55,49 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
+          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask'>Expandir tarea</button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalTask" tabindex="-1" role="dialog" aria-labelledby="modalTask" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="text-center" id="modalTask">Grafico</h5>
+          <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
+          <span aria-hidden="true">&times; </span>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <canvas id="myChartTask" width="400" height="400"></canvas>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
+          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask2'>Expandir tarea 2</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalTask2" tabindex="-1" role="dialog" aria-labelledby="modalTask2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="text-center" id="modalTask2">Grafico</h5>
+          <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
+          <span aria-hidden="true">&times; </span>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <canvas id="myChartTask2" width="400" height="400"></canvas>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>

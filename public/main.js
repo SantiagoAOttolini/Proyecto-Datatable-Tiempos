@@ -1,6 +1,6 @@
-window.onerror = function (error) {
+/* window.onerror = function (error) {
   alertify.error("Se detecto un error");
-};
+}; */
 
 var flattenObject = function (ob) {
   var toReturn = {};
@@ -439,13 +439,13 @@ $(document).ready(function () {
     }
   );
 
+//#region  Grafico Lectura, Tarea, Escritura
   $("#modalWindow, body").on("shown.bs.modal", function (e) {
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataLec = table.row(tr).data()["lectura"];
     var dataEsc = table.row(tr).data()["escritura"];
     var dataTar = table.row(tr).data()["tarea"];
-    
 
     let myChart = document.getElementById("myChart").getContext("2d");
     Chart.controllers.MyType = Chart.DatasetController.extend({});
@@ -480,6 +480,7 @@ $(document).ready(function () {
         ],
       },
       options: {
+       
         title: {
           display: true,
           fontSize: 25,
@@ -493,7 +494,7 @@ $(document).ready(function () {
         },
         layout: {
           padding: {
-            left: 0,
+            left: 10,
             right: 0,
             bottom: 0,
             top: 0,
@@ -505,4 +506,141 @@ $(document).ready(function () {
       },
     });
   });
+//#endregion
+//#region Tarea 1,2,3
+  $("#modalTask, body").on("shown.bs.modal", function (e) {
+    var clickedBtn = $(e.relatedTarget);
+    var tr = $(clickedBtn).closest("tr");
+    var dataTar1 = table.row(tr).data()["tareaT1"];
+    var dataTar2 = table.row(tr).data()["tareaT2"];
+    var dataTar3 = table.row(tr).data()["tareaT3"];
+
+    let myChartTask = document.getElementById("myChartTask").getContext("2d");
+    Chart.controllers.MyType = Chart.DatasetController.extend({});
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = "Lato";
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = "#777";
+
+    let massPopChartTask = new Chart(myChartTask, {
+      type: "line", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data: {
+        labels: ["Tarea 1", "Tarea 2", "Tarea 3"],
+        datasets: [
+          {
+            label: "Tiempos",
+            data: [dataTar1, dataTar2, dataTar3],
+            //backgroundColor:'green',
+            backgroundColor: [
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+            ],
+            borderWidth: 1,
+            borderColor: "#777",
+            hoverBorderWidth: 3,
+            hoverBorderColor: "#000",
+          },
+        ],
+      },
+      options: {
+       
+        title: {
+          display: true,
+          fontSize: 25,
+        },
+        legend: {
+          display: true,
+          position: "right",
+          labels: {
+            fontColor: "#000",
+          },
+        },
+        layout: {
+          padding: {
+            left: 10,
+            right: 0,
+            bottom: 0,
+            top: 0,
+          },
+        },
+        tooltips: {
+          enabled: true,
+        },
+      },
+    });
+  });
+//#endregion
+//#region Tarea 2.1, 2.2, 2.3
+  $("#modalTask2, body").on("shown.bs.modal", function (e) {
+    var clickedBtn = $(e.relatedTarget);
+    var tr = $(clickedBtn).closest("tr");
+    var dataTar21 = table.row(tr).data()["tareaT21"];
+    var dataTar22 = table.row(tr).data()["tareaT22"];
+    var dataTar23 = table.row(tr).data()["tareaT23"];
+
+    let myChartTask2 = document.getElementById("myChartTask2").getContext("2d");
+    Chart.controllers.MyType = Chart.DatasetController.extend({});
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = "Lato";
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = "#777";
+
+    let massPopChartTask = new Chart(myChartTask2, {
+      type: "horizontalBar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data: {
+        labels: ["Tarea 2.1", "Tarea 2.2", "Tarea 2.3"],
+        datasets: [
+          {
+            label: "Tiempos",
+            data: [dataTar21, dataTar22, dataTar23],
+            //backgroundColor:'green',
+            backgroundColor: [
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+            ],
+            borderWidth: 1,
+            borderColor: "#777",
+            hoverBorderWidth: 3,
+            hoverBorderColor: "#000",
+          },
+        ],
+      },
+      options: {
+       
+        title: {
+          display: true,
+          fontSize: 25,
+        },
+        legend: {
+          display: true,
+          position: "right",
+          labels: {
+            fontColor: "#000",
+          },
+        },
+        layout: {
+          padding: {
+            left: 10,
+            right: 0,
+            bottom: 0,
+            top: 0,
+          },
+        },
+        tooltips: {
+          enabled: true,
+        },
+      },
+    });
+  });
+  //#endregion
 });
