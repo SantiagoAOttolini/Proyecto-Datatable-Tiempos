@@ -40,11 +40,15 @@
     <label class="ml-5 mt-3 font-weight-bold">Ultima busqueda: <label class="lastDate font-weight-normal"
         id="lblDate"><label></label>
   </div>
+  <div>
+    <label class="ml-5 mt-3 font-weight-bold">Filtro por canal: <label class="lastDate font-weight-normal"
+        id="lblDate"><input id="serch" type="text">
+  </div>
   <div class="modal fade" id="modalWindow" tabindex="-1" role="dialog" aria-labelledby="modalWindow" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="text-center" id="modalWindow">Grafico</h5>
+          <h5 class="text-center" id="modalWindow">Grafico de tiempos</h5>
           <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
           <span aria-hidden="true">&times; </span>
         </div>
@@ -55,8 +59,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
-          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask'>Expandir tarea</button>
-         
+          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask'>Expandir tarea</button>       
         </div>
       </div>
     </div>
@@ -66,7 +69,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="text-center" id="modalTask">Grafico</h5>
+          <h5 class="text-center" id="modalTask">Grafico: Subprocesos de tarea</h5>
           <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
           <span aria-hidden="true">&times; </span>
         </div>
@@ -87,7 +90,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="text-center" id="modalTask2">Grafico</h5>
+          <h5 class="text-center" id="modalTask2">Grafico: Subprocesos de tarea 2</h5>
           <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
           <span aria-hidden="true">&times; </span>
         </div>
@@ -98,6 +101,27 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalWindowAverage" tabindex="-1" role="dialog" aria-labelledby="modalWindowAverage" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="text-center" id="modalWindowAverage">Grafico: Promedios</h5>
+          <button class="close" data-dismiss="modal" aria-label="Cerrar"></button>
+          <span aria-hidden="true">&times; </span>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <canvas id="myChartAverage" width="400" height="400"></canvas>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
+         
         </div>
       </div>
     </div>

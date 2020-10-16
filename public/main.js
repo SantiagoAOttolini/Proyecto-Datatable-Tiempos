@@ -51,7 +51,15 @@ var defTableSettings = {
         return {
           canal: v.canal,
           usr: v.usr_receptor,
-          fecha: v.date.replace("GMT", ""),
+          fecha: v.date
+            .replace("GMT", "")
+            .replace("Thu,", "")
+            .replace("Fri,", "")
+            .replace("Mon,", "")
+            .replace("Tue,", "")
+            .replace("Wed,", "")
+            .replace("Sat,", "")
+            .replace("Sun,", ""),
           tiempo: jsparsed.tiempo,
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
           escritura: jsparsed.Inner.find((element) => element.fase == "W")
@@ -71,7 +79,9 @@ var defTableSettings = {
       console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
     },
   },
-
+  language: {
+    search: "Buscar:",
+  },
   columns: [
     {
       width: "10%",
@@ -90,7 +100,7 @@ var defTableSettings = {
     },
     {
       title:
-        "Tiempo total" +
+        "Tiempo total (S)" +
         "<button class='btnExpandTotal rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
         "<button  class='btnCollapseTotal rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
       data: "tiempo",
@@ -100,7 +110,7 @@ var defTableSettings = {
     },
     {
       visible: false,
-      title: "Lectura",
+      title: "Lectura (S)",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -110,7 +120,7 @@ var defTableSettings = {
     {
       visible: false,
       title:
-        "Tarea" +
+        "Tarea (S)" +
         "<button class='btnExpandTask rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
         "<button  class='btnCollapseTask invisible rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
       data: "tarea",
@@ -179,7 +189,7 @@ var defTableSettings = {
     },
     {
       visible: false,
-      title: "Escritura",
+      title: "Escritura (S)",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -282,6 +292,9 @@ $(document).ready(function () {
     table.ajax.reload(null, false);
     tableAverage.ajax.reload(null, false);
   });
+  $("#serch, body").on("keyup", function () {
+    table.columns(0).search(this.value).draw();
+  });
 });
 
 var defTableSettingsAverage = {
@@ -313,13 +326,6 @@ var defTableSettingsAverage = {
       columnTarea = $("#total").DataTable().column(5).data().sum();
 
       var filas = json.data.slice(0, 1).map(function () {
-        if (isNaN(columnTiempo, columnLectura, columnEscritura, columnTarea))
-          parceFloat(
-            "columnTiempo",
-            "columnLectura",
-            "columnEscritura",
-            "columnTarea"
-          );
         return {
           tiempo: columnTiempo / countRow,
           lectura: columnLectura / countRow,
@@ -329,6 +335,7 @@ var defTableSettingsAverage = {
       });
       return filas;
     },
+
     error: function (XMLHttpRequest, textStatus, errorThrown) {
       console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
     },
@@ -336,6 +343,7 @@ var defTableSettingsAverage = {
   searching: false,
   info: false,
   paging: false,
+  ordering: false,
   columns: [
     {
       visible: false,
@@ -348,7 +356,7 @@ var defTableSettingsAverage = {
 
     {
       width: "23%",
-      title: "Tiempo promedio",
+      title: "Tiempo promedio (S)",
       data: "tiempo",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -357,7 +365,7 @@ var defTableSettingsAverage = {
     {
       visible: false,
       width: "10%",
-      title: "Lectura promedio",
+      title: "Lectura promedio (S)",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -368,7 +376,7 @@ var defTableSettingsAverage = {
     {
       visible: false,
       width: "17%",
-      title: "Tarea promedio",
+      title: "Tarea promedio (S)",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -377,7 +385,7 @@ var defTableSettingsAverage = {
     },
     {
       visible: false,
-      title: "Escritura promedio",
+      title: "Escritura promedio (S)",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -385,11 +393,10 @@ var defTableSettingsAverage = {
       className: "text-success",
     },
     {
-      visible: false,
-      width: "9%",
-      title: "",
+      width: "6%",
+      title: "Accion",
       render: function (data, type, row) {
-        return "";
+        return "<button class='btnChart btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindowAverage'></button>";
       },
     },
   ],
@@ -435,11 +442,10 @@ $(document).ready(function () {
       tableAverage.column(2).visible(false);
       tableAverage.column(3).visible(false);
       tableAverage.column(4).visible(false);
-      tableAverage.column(5).visible(false);
     }
   );
 
-//#region  Grafico Lectura, Tarea, Escritura
+  //#region Grafico Lectura, Tarea, Escritura
   $("#modalWindow, body").on("shown.bs.modal", function (e) {
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
@@ -451,6 +457,7 @@ $(document).ready(function () {
     Chart.controllers.MyType = Chart.DatasetController.extend({});
 
     // Global Options
+
     Chart.defaults.global.defaultFontFamily = "Lato";
     Chart.defaults.global.defaultFontSize = 18;
     Chart.defaults.global.defaultFontColor = "#777";
@@ -461,9 +468,8 @@ $(document).ready(function () {
         labels: ["Lectura", "Tarea", "Escritura"],
         datasets: [
           {
-            label: "Tiempos",
+            label: "Barra",
             data: [dataLec, dataTar, dataEsc],
-            //backgroundColor:'green',
             backgroundColor: [
               "rgba(37, 179, 179, 0.6)",
               "rgba(255, 99, 132, 0.6)",
@@ -476,11 +482,12 @@ $(document).ready(function () {
             borderColor: "#777",
             hoverBorderWidth: 3,
             hoverBorderColor: "#000",
+            order: 1,
           },
         ],
       },
+
       options: {
-       
         title: {
           display: true,
           fontSize: 25,
@@ -506,8 +513,8 @@ $(document).ready(function () {
       },
     });
   });
-//#endregion
-//#region Tarea 1,2,3
+  //#endregion
+  //#region Grafico Tarea 1,2,3
   $("#modalTask, body").on("shown.bs.modal", function (e) {
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
@@ -524,7 +531,7 @@ $(document).ready(function () {
     Chart.defaults.global.defaultFontColor = "#777";
 
     let massPopChartTask = new Chart(myChartTask, {
-      type: "line", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      type: "bar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
       data: {
         labels: ["Tarea 1", "Tarea 2", "Tarea 3"],
         datasets: [
@@ -548,7 +555,6 @@ $(document).ready(function () {
         ],
       },
       options: {
-       
         title: {
           display: true,
           fontSize: 25,
@@ -574,8 +580,8 @@ $(document).ready(function () {
       },
     });
   });
-//#endregion
-//#region Tarea 2.1, 2.2, 2.3
+  //#endregion
+  //#region Grafico Tarea 2.1, 2.2, 2.3
   $("#modalTask2, body").on("shown.bs.modal", function (e) {
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
@@ -592,7 +598,7 @@ $(document).ready(function () {
     Chart.defaults.global.defaultFontColor = "#777";
 
     let massPopChartTask = new Chart(myChartTask2, {
-      type: "horizontalBar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      type: "bar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
       data: {
         labels: ["Tarea 2.1", "Tarea 2.2", "Tarea 2.3"],
         datasets: [
@@ -616,7 +622,75 @@ $(document).ready(function () {
         ],
       },
       options: {
-       
+        title: {
+          display: true,
+          fontSize: 25,
+        },
+        legend: {
+          display: true,
+          position: "right",
+          labels: {
+            fontColor: "#000",
+          },
+        },
+        layout: {
+          padding: {
+            left: 10,
+            right: 0,
+            bottom: 0,
+            top: 0,
+          },
+        },
+        tooltips: {
+          enabled: true,
+        },
+      },
+    });
+  });
+  //#endregion
+  //#region Grafico Promedios
+  $("#modalWindowAverage, body").on("shown.bs.modal", function (e) {
+    var clickedBtn = $(e.relatedTarget);
+    var tr = $(clickedBtn).closest("tr");
+    var dataLecAv = tableAverage.row(tr).data()["lectura"];
+    var dataEscAv = tableAverage.row(tr).data()["escritura"];
+    var dataTarAv = tableAverage.row(tr).data()["tarea"];
+
+    let myChartAverage = document
+      .getElementById("myChartAverage")
+      .getContext("2d");
+    Chart.controllers.MyType = Chart.DatasetController.extend({});
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = "Lato";
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = "#777";
+
+    let massPopChart = new Chart(myChartAverage, {
+      type: "bar", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data: {
+        labels: ["Lectura", "Tarea", "Escritura"],
+        datasets: [
+          {
+            label: "Tiempos",
+            data: [dataLecAv, dataTarAv, dataEscAv],
+            backgroundColor: [
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+              "rgba(37, 179, 179, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(72, 161, 36, 0.6)",
+            ],
+            borderWidth: 1,
+            borderColor: "#777",
+            hoverBorderWidth: 3,
+            hoverBorderColor: "#000",
+          },
+        ],
+      },
+
+      options: {
         title: {
           display: true,
           fontSize: 25,
