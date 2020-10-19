@@ -1,6 +1,3 @@
-/* window.onerror = function (error) {
-  alertify.error("Se detecto un error");
-}; */
 
 var flattenObject = function (ob) {
   var toReturn = {};
