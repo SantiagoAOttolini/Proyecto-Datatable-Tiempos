@@ -19,10 +19,12 @@ var flattenObject = function (ob) {
   return toReturn;
 };
 
+//GET Ajax
 var defTableSettings = {
   ajax: {
     type: "GET",
     url: "http://161.97.81.226:7070/get_logs/",
+    //Parametros
     data: function (a) {
       (a.fromDate = moment().format(
         document.getElementById("from_date").value,
@@ -34,12 +36,14 @@ var defTableSettings = {
         )),
         (a.TipoLog = "1");
     },
+    //Token
     beforeSend: function (request) {
       request.setRequestHeader(
         "Authorization",
         "Bearer " + localStorage.getItem("tokenr")
       );
     },
+    //Obtencion de datos
     dataSrc: function (json) {
       var filas = json.data.map(function (v) {
         jsparsed = JSON.parse(v.json_log);
@@ -48,6 +52,7 @@ var defTableSettings = {
         return {
           canal: v.canal,
           usr: v.usr_receptor,
+          //Formato de fecha
           fecha: v.date
             .replace("GMT", "")
             .replace("Thu,", "")
@@ -58,10 +63,12 @@ var defTableSettings = {
             .replace("Sat,", "")
             .replace("Sun,", ""),
           tiempo: jsparsed.tiempo,
+          //Obtencion de las columnas lectura, escritura y tarea
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
           escritura: jsparsed.Inner.find((element) => element.fase == "W")
             .tiempo,
           tarea: jsparsed.Inner.find((element) => element.fase == "T").tiempo,
+          //Obtencion de los subprocesos de tiempo
           tareaT1: jsparsed.Inner[0].Inner[0].tiempo,
           tareaT2: jsparsed.Inner[0].Inner[1].tiempo,
           tareaT3: jsparsed.Inner[0].Inner[2].tiempo,
@@ -79,6 +86,7 @@ var defTableSettings = {
   language: {
     search: "Buscar:",
   },
+  //Definicion de columnas
   columns: [
     {
       width: "10%",
@@ -194,6 +202,7 @@ var defTableSettings = {
       className: "text-success",
     },
     {
+      //Boton Generar Grafico
       title: "Accion",
       render: function (data, type, row) {
         return "<button class='btnChart btn btn-primary fa fa-line-chart ml-2' data-toggle='modal' data-target='#modalWindow'></button>";
@@ -202,6 +211,7 @@ var defTableSettings = {
   ],
 };
 
+//Capturar la ultima fecha de filtrado
 var captureDate = function () {
   $("#total, body").on("click", "button.btnFilter", function () {
     var date = new Date(document.lastModified);
@@ -210,6 +220,7 @@ var captureDate = function () {
 };
 captureDate();
 
+//POST Ajax
 $(document).ready(function () {
   var token = "";
   var tokenr = "";
@@ -219,6 +230,7 @@ $(document).ready(function () {
     data: JSON.stringify({ username: "gd_usr", password: "6D14l0g0" }),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
+    //Token
     success: function (data) {
       /* localStorage.setItem("token", data.TOKEN); */
       localStorage.setItem("tokenr", data.TOKEN_REFRESH);
@@ -231,6 +243,7 @@ $(document).ready(function () {
     },
   });
 
+  //Ocultar o visibilizar columnas
   $("#total thead, #average thead").on(
     "click",
     "button.btnExpandTotal",
@@ -242,7 +255,7 @@ $(document).ready(function () {
       table.column(12).visible(true);
     }
   );
-
+  //Ocultar o visibilizar columnas
   $("#total thead, #average thead").on(
     "click",
     "button.btnCollapseTotal",
@@ -258,14 +271,14 @@ $(document).ready(function () {
       table.column(12).visible(false);
     }
   );
-
+  //Ocultar o visibilizar columnas
   $("#total thead").on("click", "button.btnExpandTask", function () {
     $(this).toggleClass("fa-minus btnCollapseTask");
     table.column(6).visible(true);
     table.column(7).visible(true);
     table.column(11).visible(true);
   });
-
+  //Ocultar o visibilizar columnas
   $("#total thead").on("click", "button.btnCollapseTask", function () {
     table.column(6).visible(false);
     table.column(7).visible(false);
@@ -274,33 +287,36 @@ $(document).ready(function () {
     table.column(10).visible(false);
     table.column(11).visible(false);
   });
-
+  //Ocultar o visibilizar columnas
   $("#total thead").on("click", "button.btnExpandTask2", function () {
     $(this).toggleClass("fa-minus btnCollapseTask2");
     table.column(8).visible(true);
     table.column(9).visible(true);
     table.column(10).visible(true);
   });
-
+  //Ocultar o visibilizar columnas
   $("#total thead").on("click", "button.btnCollapseTask2", function () {
     table.column(8).visible(false);
     table.column(9).visible(false);
     table.column(10).visible(false);
   });
-
+  //Filtrado de fechas
   $("#total,#average, body").on("click", "button.btnFilter", function () {
     table.ajax.reload(null, false);
     tableAverage.ajax.reload(null, false);
   });
+  //Filtrado por canal
   $("#serch, body").on("keyup", function () {
     table.columns(0).search(this.value).draw();
   });
 });
 
+//GET Ajax tabla promedio
 var defTableSettingsAverage = {
   ajax: {
     type: "GET",
     url: "http://161.97.81.226:7070/get_logs/",
+    //Parametros
     data: function (a) {
       (a.fromDate = moment().format(
         document.getElementById("from_date").value,
@@ -318,6 +334,7 @@ var defTableSettingsAverage = {
         "Bearer " + localStorage.getItem("tokenr")
       );
     },
+    //Calculo de promedio
     dataSrc: function (json) {
       var countRow = $("#total").DataTable().rows().count();
       columnTiempo = $("#total").DataTable().column(3).data().sum();
@@ -344,6 +361,7 @@ var defTableSettingsAverage = {
   info: false,
   paging: false,
   ordering: false,
+  //Definicion de columnas de la tabla promedio
   columns: [
     {
       visible: false,
@@ -402,6 +420,7 @@ var defTableSettingsAverage = {
   ],
 };
 
+//POST Ajax de la tabla promedio
 $(document).ready(function () {
   var token = "";
   var tokenr = "";
@@ -411,6 +430,7 @@ $(document).ready(function () {
     data: JSON.stringify({ username: "gd_usr", password: "6D14l0g0" }),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
+    //Token
     success: function (data) {
       /* localStorage.setItem("token", data.TOKEN); */
       localStorage.setItem("tokenr", data.TOKEN_REFRESH);
@@ -422,7 +442,7 @@ $(document).ready(function () {
       alert(errMsg);
     },
   });
-
+ //Ocultar o visibilizar columnas
   $("#total thead, #average thead").on(
     "click",
     "button.btnExpandTotal",
@@ -436,7 +456,7 @@ $(document).ready(function () {
       tableAverage.column(5).visible(true);
     }
   );
-
+  //Ocultar o visibilizar columnas
   $("#total thead, #average thead").on(
     "click",
     "button.btnCollapseTotal",
@@ -450,6 +470,7 @@ $(document).ready(function () {
 
   //#region Grafico Lectura, Tarea, Escritura
   $("#modalWindow, body").on("shown.bs.modal", function (e) {
+    //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataLec = table.row(tr).data()["lectura"];
@@ -519,6 +540,7 @@ $(document).ready(function () {
   //#endregion
   //#region Grafico Tarea 1,2,3
   $("#modalTask, body").on("shown.bs.modal", function (e) {
+    //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataTar1 = table.row(tr).data()["tareaT1"];
@@ -586,6 +608,7 @@ $(document).ready(function () {
   //#endregion
   //#region Grafico Tarea 2.1, 2.2, 2.3
   $("#modalTask2, body").on("shown.bs.modal", function (e) {
+    //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataTar21 = table.row(tr).data()["tareaT21"];
@@ -653,6 +676,7 @@ $(document).ready(function () {
   //#endregion
   //#region Grafico Promedios
   $("#modalWindowAverage, body").on("shown.bs.modal", function (e) {
+    //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataLecAv = tableAverage.row(tr).data()["lectura"];

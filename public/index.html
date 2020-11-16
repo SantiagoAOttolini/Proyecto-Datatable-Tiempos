@@ -11,24 +11,23 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
-
-  <!-- alertify -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
-  
+
 
 </head>
+
 <body>
   <header class="text-muted alert alert-dark text-center display-3">
     Tabla de tiempos
   </header>
-
+  <!-- Filtro de fecha -->
   <div id="datetime mt-5">
     <label class="startDate ml-5 font-weight-bold" for="start">Fecha inicio:</label>
-    <input class="date_range_filter m-1" type="datetime-local" value="2020-10-01T10:51:58" min="2020-09-30T10:51:58" step="1" id="from_date"
-      name="from-date" />
+    <input class="date_range_filter m-1" type="datetime-local" value="2020-10-01T10:51:58" min="2020-09-30T10:51:58"
+      step="1" id="from_date" name="from-date" />
 
     <label class="endDate m-1 font-weight-bold" for="start">Fecha fin:</label>
     <input class="date_range_filter m-1" type="datetime-local" value="2020-10-02T10:51:58" step="1" id="to_date"
@@ -36,14 +35,17 @@
 
     <button class="btnFilter ml-2 btn btn-primary">Filtrar</button>
   </div>
+  <!-- Ultimo filtro realizado -->
   <div>
     <label class="ml-5 mt-3 font-weight-bold">Ultima busqueda: <label class="lastDate font-weight-normal"
         id="lblDate"><label></label>
   </div>
+  <!-- Busqueda por canal -->
   <div>
-    <label class="ml-5 mt-3 font-weight-bold">Canal: <label class="lastDate font-weight-normal"
-        id="lblDate"><input id="serch" type="text">
+    <label class="ml-5 mt-3 font-weight-bold">Canal: <label class="lastDate font-weight-normal" id="lblDate"><input
+          id="serch" type="text">
   </div>
+  <!-- Modal  -->
   <div class="modal fade" id="modalWindow" tabindex="-1" role="dialog" aria-labelledby="modalWindow" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -59,12 +61,13 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
-          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask'>Expandir tarea</button>       
+          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask'>Expandir
+            tarea</button>
         </div>
       </div>
     </div>
   </div>
-
+  <!-- Modal  -->
   <div class="modal fade" id="modalTask" tabindex="-1" role="dialog" aria-labelledby="modalTask" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -80,12 +83,13 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
-          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask2'>Expandir tarea 2</button>
+          <button class='btnExpandTask btn btn-warning' data-toggle='modal' data-target='#modalTask2'>Expandir tarea
+            2</button>
         </div>
       </div>
     </div>
   </div>
-
+  <!-- Modal  -->
   <div class="modal fade" id="modalTask2" tabindex="-1" role="dialog" aria-labelledby="modalTask2" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -105,8 +109,9 @@
       </div>
     </div>
   </div>
-
-  <div class="modal fade" id="modalWindowAverage" tabindex="-1" role="dialog" aria-labelledby="modalWindowAverage" aria-hidden="true">
+  <!-- Modal  -->
+  <div class="modal fade" id="modalWindowAverage" tabindex="-1" role="dialog" aria-labelledby="modalWindowAverage"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -121,18 +126,18 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-warning" type="button" data-dismiss="modal">Cerrar</button>
-         
+
         </div>
       </div>
     </div>
   </div>
-
+  <!-- Definicion de tabla principal -->
   <div class="m-5">
     <table id="total" class="table table-striped table-bordered" style="width: 100%">
       <thead class="text-center"></thead>
       <tbody class="text-center"></tbody>
     </table>
-
+    <!-- Definicion de tabla promedio -->
     <div class="average mt-5">
       <table id="average" class="table table-striped table-bordered" style="width: 100%">
         <thead class="text-center"></thead>
