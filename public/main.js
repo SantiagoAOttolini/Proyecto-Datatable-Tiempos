@@ -37,7 +37,7 @@ var defTableSettings = {
     beforeSend: function (request) {
       request.setRequestHeader(
         "Authorization",
-        "Bearer " + localStorage.getItem("token")
+        "Bearer " + localStorage.getItem("tokenr")
       );
     },
     dataSrc: function (json) {
@@ -73,7 +73,7 @@ var defTableSettings = {
       return filas;
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
+      console.log("XHR ERROR get_logs" + XMLHttpRequest.status);
     },
   },
   language: {
@@ -212,6 +212,7 @@ captureDate();
 
 $(document).ready(function () {
   var token = "";
+  var tokenr = "";
   $.ajax({
     type: "POST",
     url: "http://vmi351008.contaboserver.net:5050/authpad/login",
@@ -219,8 +220,10 @@ $(document).ready(function () {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (data) {
-      localStorage.setItem("token", data.TOKEN);
-      token = data.TOKEN;
+      /* localStorage.setItem("token", data.TOKEN); */
+      localStorage.setItem("tokenr", data.TOKEN_REFRESH);
+      /* token = data.TOKEN; */
+      tokenr = data.TOKEN_REFRESH;
       table = $("#total").DataTable(defTableSettings);
     },
     error: function (errMsg) {
@@ -312,7 +315,7 @@ var defTableSettingsAverage = {
     beforeSend: function (request) {
       request.setRequestHeader(
         "Authorization",
-        "Bearer " + localStorage.getItem("token")
+        "Bearer " + localStorage.getItem("tokenr")
       );
     },
     dataSrc: function (json) {
@@ -334,7 +337,7 @@ var defTableSettingsAverage = {
     },
 
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      console.log("XHR ERROR Get_DialogChatStatus" + XMLHttpRequest.status);
+      console.log("XHR ERROR get_logs" + XMLHttpRequest.status);
     },
   },
   searching: false,
@@ -401,6 +404,7 @@ var defTableSettingsAverage = {
 
 $(document).ready(function () {
   var token = "";
+  var tokenr = "";
   $.ajax({
     type: "POST",
     url: "http://vmi351008.contaboserver.net:5050/authpad/login",
@@ -408,8 +412,10 @@ $(document).ready(function () {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (data) {
-      localStorage.setItem("token", data.TOKEN);
-      token = data.TOKEN;
+      /* localStorage.setItem("token", data.TOKEN); */
+      localStorage.setItem("tokenr", data.TOKEN_REFRESH);
+     /*  token = data.TOKEN; */
+      tokenr = data.TOKEN_REFRESH;
       tableAverage = $("#average").DataTable(defTableSettingsAverage);
     },
     error: function (errMsg) {
