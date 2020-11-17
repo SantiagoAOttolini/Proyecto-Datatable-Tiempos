@@ -414,7 +414,7 @@ var defTableSettingsAverage = {
     {
       //1
       width: "23%",
-      title: "Tiempo promedio",
+      title: "Tiempos promedio",
       data: "tiempo",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -424,7 +424,7 @@ var defTableSettingsAverage = {
       //2
       visible: false,
       width: "10%",
-      title: "R promedio",
+      title: "R",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -436,7 +436,7 @@ var defTableSettingsAverage = {
       //3
       visible: false,
       width: "17%",
-      title: "T promedio",
+      title: "T",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -447,7 +447,7 @@ var defTableSettingsAverage = {
       //4
       visible: false,
       width: "17%",
-      title: "T1 promedio",
+      title: "T.1",
       data: "tarea1",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -458,7 +458,7 @@ var defTableSettingsAverage = {
       //5
       visible: false,
       width: "17%",
-      title: "T2 promedio",
+      title: "T.2",
       data: "tarea2",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -469,7 +469,7 @@ var defTableSettingsAverage = {
       //6
       visible: false,
       width: "17%",
-      title: "T2.1 promedio",
+      title: "T.2.1",
       data: "tarea21",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -480,7 +480,7 @@ var defTableSettingsAverage = {
       //7
       visible: false,
       width: "17%",
-      title: "T2.2 promedio",
+      title: "T.2.2",
       data: "tarea22",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -491,7 +491,7 @@ var defTableSettingsAverage = {
       //8
       visible: false,
       width: "17%",
-      title: "T2.3 promedio",
+      title: "T.2.3",
       data: "tarea23",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -502,7 +502,7 @@ var defTableSettingsAverage = {
       //9
       visible: false,
       width: "17%",
-      title: "T3 promedio",
+      title: "T.3",
       data: "tarea3",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -512,7 +512,7 @@ var defTableSettingsAverage = {
     {
       //10
       visible: false,
-      title: "W promedio",
+      title: "W",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
