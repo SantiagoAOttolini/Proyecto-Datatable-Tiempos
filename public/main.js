@@ -53,7 +53,7 @@ var defTableSettings = {
           canal: v.canal,
           usr: v.usr_receptor,
           //Formato de fecha
-          fecha: moment(v.date).format("YY/MM/DD"),
+          fecha: moment(v.date).format("DD/MM/YY"),
           tiempo: jsparsed.tiempo,
           //Obtencion de las columnas lectura, escritura y tarea
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
