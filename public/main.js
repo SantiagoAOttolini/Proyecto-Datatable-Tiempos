@@ -435,7 +435,7 @@ var defTableSettingsAverage = {
     {
       //3
       visible: false,
-      width: "17%",
+      width: "15%",
       title: "T",
       data: "tarea",
       render: function (data, type, row) {
@@ -446,7 +446,6 @@ var defTableSettingsAverage = {
     {
       //4
       visible: false,
-      width: "17%",
       title: "T.1",
       data: "tarea1",
       render: function (data, type, row) {
@@ -457,7 +456,6 @@ var defTableSettingsAverage = {
     {
       //5
       visible: false,
-      width: "17%",
       title: "T.2",
       data: "tarea2",
       render: function (data, type, row) {
@@ -468,7 +466,6 @@ var defTableSettingsAverage = {
     {
       //6
       visible: false,
-      width: "17%",
       title: "T.2.1",
       data: "tarea21",
       render: function (data, type, row) {
@@ -479,7 +476,6 @@ var defTableSettingsAverage = {
     {
       //7
       visible: false,
-      width: "17%",
       title: "T.2.2",
       data: "tarea22",
       render: function (data, type, row) {
@@ -490,7 +486,6 @@ var defTableSettingsAverage = {
     {
       //8
       visible: false,
-      width: "17%",
       title: "T.2.3",
       data: "tarea23",
       render: function (data, type, row) {
@@ -501,7 +496,6 @@ var defTableSettingsAverage = {
     {
       //9
       visible: false,
-      width: "17%",
       title: "T.3",
       data: "tarea3",
       render: function (data, type, row) {
