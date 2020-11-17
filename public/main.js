@@ -53,15 +53,7 @@ var defTableSettings = {
           canal: v.canal,
           usr: v.usr_receptor,
           //Formato de fecha
-          fecha: v.date
-            .replace("GMT", "")
-            .replace("Thu,", "")
-            .replace("Fri,", "")
-            .replace("Mon,", "")
-            .replace("Tue,", "")
-            .replace("Wed,", "")
-            .replace("Sat,", "")
-            .replace("Sun,", ""),
+          fecha: moment(v.date).format("YY/MM/DD"),
           tiempo: jsparsed.tiempo,
           //Obtencion de las columnas lectura, escritura y tarea
           lectura: jsparsed.Inner.find((element) => element.fase == "R").tiempo,
@@ -75,11 +67,13 @@ var defTableSettings = {
           tareaT21: jsparsed.Inner[0].Inner[1].Inner[0].tiempo,
           tareaT22: jsparsed.Inner[0].Inner[1].Inner[1].tiempo,
           tareaT23: jsparsed.Inner[0].Inner[1].Inner[2].tiempo,
+          
         };
+        
       });
       return filas;
     },
-    error: function (XMLHttpRequest, textStatus, errorThrown) {
+    error: function (XMLHttpRequest, textStatus, errorThrown) { 
       console.log("XHR ERROR get_logs" + XMLHttpRequest.status);
     },
   },
@@ -89,33 +83,38 @@ var defTableSettings = {
   //Definicion de columnas
   columns: [
     {
+      //0
       width: "10%",
       title: "Canal",
       data: "canal",
     },
     {
+      //1
       width: "10%",
       title: "Celular",
       data: "usr",
     },
     {
+      //2
       width: "10%",
       title: "Fecha",
       data: "fecha",
     },
     {
+      //3
       title:
-        "Tiempo total (S)" +
-        "<button class='btnExpandTotal rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
-        "<button  class='btnCollapseTotal rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
+        "Tiempo" +
+        "<button class='btnExpandTotal btn text-dark fa fa-plus fa-sm ml-1' ></button>" +
+        "<button  class='btnCollapseTotal  btn text-dark fa fa-minus fa-sm ml-1'></button>",
       data: "tiempo",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
     },
     {
+      //4
       visible: false,
-      title: "Lectura (S)",
+      title: "R",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -123,11 +122,12 @@ var defTableSettings = {
       className: "text-primary",
     },
     {
+      //5
       visible: false,
       title:
-        "Tarea (S)" +
-        "<button class='btnExpandTask rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
-        "<button  class='btnCollapseTask invisible rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
+        "T" +
+        "<button class='btnExpandTask btn text-dark fa fa-plus fa-sm ml-1' ></button>" +
+        "<button  class='btnCollapseTask invisible  btn text-dark fa fa-minus fa-sm ml-1'></button>",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -135,8 +135,9 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //6
       visible: false,
-      title: "Tarea T.1",
+      title: "T.1",
       data: "tareaT1",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -144,11 +145,12 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //7
       visible: false,
       title:
-        "Tarea T.2" +
-        "<button class='btnExpandTask2 rounded-circle btn btn-outline-light text-dark border fa fa-plus fa-sm ml-1' ></button>" +
-        "<button  class='btnCollapseTask2 invisible rounded-circle  btn btn-outline-light text-dark border fa fa-minus fa-sm ml-1'></button>",
+        "T.2" +
+        "<button class='btnExpandTask2 btn text-dark fa fa-plus fa-sm ml-1' ></button>" +
+        "<button  class='btnCollapseTask2 invisible  btn text-dark fa fa-minus fa-sm ml-1'></button>",
       data: "tareaT2",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -157,8 +159,9 @@ var defTableSettings = {
     },
 
     {
+      //8
       visible: false,
-      title: "Tarea T.2.1",
+      title: "T.2.1",
       data: "tareaT21",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -166,8 +169,9 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //9
       visible: false,
-      title: "Tarea T.2.2",
+      title: "T.2.2",
       data: "tareaT22",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -175,8 +179,9 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //10
       visible: false,
-      title: "Tarea T.2.3",
+      title: "T.2.3",
       data: "tareaT23",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -184,8 +189,9 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //11
       visible: false,
-      title: "Tarea T.3",
+      title: "T.3",
       data: "tareaT3",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -193,8 +199,9 @@ var defTableSettings = {
       className: "text-danger",
     },
     {
+      //12
       visible: false,
-      title: "Escritura (S)",
+      title: "W",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -202,6 +209,7 @@ var defTableSettings = {
       className: "text-success",
     },
     {
+      //13
       //Boton Generar Grafico
       title: "Accion",
       render: function (data, type, row) {
@@ -242,21 +250,18 @@ $(document).ready(function () {
       alert(errMsg);
     },
   });
-
-  //Ocultar o visibilizar columnas
-  $("#total thead, #average thead").on(
+  $("#total thead").on(
     "click",
     "button.btnExpandTotal",
     function () {
       $(this).toggleClass("fa-minus btnCollapseTotal");
-
       table.column(4).visible(true);
       table.column(5).visible(true);
       table.column(12).visible(true);
     }
   );
-  //Ocultar o visibilizar columnas
-  $("#total thead, #average thead").on(
+
+  $("#total thead").on(
     "click",
     "button.btnCollapseTotal",
     function () {
@@ -271,14 +276,18 @@ $(document).ready(function () {
       table.column(12).visible(false);
     }
   );
-  //Ocultar o visibilizar columnas
-  $("#total thead").on("click", "button.btnExpandTask", function () {
+
+  $("#total thead,#average thead").on("click", "button.btnExpandTask", function () {
     $(this).toggleClass("fa-minus btnCollapseTask");
     table.column(6).visible(true);
     table.column(7).visible(true);
     table.column(11).visible(true);
+
+    tableAverage.column(4).visible(true);
+    tableAverage.column(5).visible(true);
+    tableAverage.column(9).visible(true);
   });
-  //Ocultar o visibilizar columnas
+
   $("#total thead").on("click", "button.btnCollapseTask", function () {
     table.column(6).visible(false);
     table.column(7).visible(false);
@@ -286,20 +295,36 @@ $(document).ready(function () {
     table.column(9).visible(false);
     table.column(10).visible(false);
     table.column(11).visible(false);
+
+    tableAverage.column(4).visible(false);
+    tableAverage.column(5).visible(false);
+    tableAverage.column(6).visible(false);
+    tableAverage.column(7).visible(false);
+    tableAverage.column(8).visible(false);
+    tableAverage.column(9).visible(false);
   });
-  //Ocultar o visibilizar columnas
+
   $("#total thead").on("click", "button.btnExpandTask2", function () {
     $(this).toggleClass("fa-minus btnCollapseTask2");
     table.column(8).visible(true);
     table.column(9).visible(true);
     table.column(10).visible(true);
+
+    tableAverage.column(6).visible(true);
+    tableAverage.column(7).visible(true);
+    tableAverage.column(8).visible(true);
   });
-  //Ocultar o visibilizar columnas
+
   $("#total thead").on("click", "button.btnCollapseTask2", function () {
     table.column(8).visible(false);
     table.column(9).visible(false);
     table.column(10).visible(false);
+
+    tableAverage.column(6).visible(false);
+    tableAverage.column(7).visible(false);
+    tableAverage.column(8).visible(false);
   });
+  //Ocultar o visibilizar columnas
   //Filtrado de fechas
   $("#total,#average, body").on("click", "button.btnFilter", function () {
     table.ajax.reload(null, false);
@@ -341,6 +366,13 @@ var defTableSettingsAverage = {
       columnLectura = $("#total").DataTable().column(4).data().sum();
       columnEscritura = $("#total").DataTable().column(12).data().sum();
       columnTarea = $("#total").DataTable().column(5).data().sum();
+      columnTarea1 = $("#total").DataTable().column(6).data().sum();
+      columnTarea2 = $("#total").DataTable().column(7).data().sum();
+      columnTarea21 = $("#total").DataTable().column(8).data().sum();
+      columnTarea22 = $("#total").DataTable().column(9).data().sum();
+      columnTarea23 = $("#total").DataTable().column(10).data().sum();
+      columnTarea3 = $("#total").DataTable().column(11).data().sum();
+
 
       var filas = json.data.slice(0, 1).map(function () {
         return {
@@ -348,6 +380,12 @@ var defTableSettingsAverage = {
           lectura: columnLectura / countRow,
           escritura: columnEscritura / countRow,
           tarea: columnTarea / countRow,
+          tarea1:columnTarea1 / countRow,
+          tarea2:columnTarea2 / countRow,
+          tarea21:columnTarea21 / countRow,
+          tarea22:columnTarea22 / countRow,
+          tarea23:columnTarea23 / countRow,
+          tarea3:columnTarea3 / countRow,
         };
       });
       return filas;
@@ -364,6 +402,7 @@ var defTableSettingsAverage = {
   //Definicion de columnas de la tabla promedio
   columns: [
     {
+      //0
       visible: false,
       width: "30%",
       title: "",
@@ -373,17 +412,19 @@ var defTableSettingsAverage = {
     },
 
     {
+      //1
       width: "23%",
-      title: "Tiempo promedio (S)",
+      title: "Tiempo promedio",
       data: "tiempo",
       render: function (data, type, row) {
         return data.toFixed(4);
       },
     },
     {
+      //2
       visible: false,
       width: "10%",
-      title: "Lectura promedio (S)",
+      title: "R promedio",
       data: "lectura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -392,9 +433,10 @@ var defTableSettingsAverage = {
     },
 
     {
+      //3
       visible: false,
       width: "17%",
-      title: "Tarea promedio (S)",
+      title: "T promedio",
       data: "tarea",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -402,8 +444,75 @@ var defTableSettingsAverage = {
       className: "text-danger",
     },
     {
+      //4
       visible: false,
-      title: "Escritura promedio (S)",
+      width: "17%",
+      title: "T1 promedio",
+      data: "tarea1",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //5
+      visible: false,
+      width: "17%",
+      title: "T2 promedio",
+      data: "tarea2",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //6
+      visible: false,
+      width: "17%",
+      title: "T2.1 promedio",
+      data: "tarea21",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //7
+      visible: false,
+      width: "17%",
+      title: "T2.2 promedio",
+      data: "tarea22",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //8
+      visible: false,
+      width: "17%",
+      title: "T2.3 promedio",
+      data: "tarea23",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //9
+      visible: false,
+      width: "17%",
+      title: "T3 promedio",
+      data: "tarea3",
+      render: function (data, type, row) {
+        return data.toFixed(4);
+      },
+      className: "text-danger",
+    },
+    {
+      //10
+      visible: false,
+      title: "W promedio",
       data: "escritura",
       render: function (data, type, row) {
         return data.toFixed(4);
@@ -449,11 +558,9 @@ $(document).ready(function () {
     function () {
       $(this).toggleClass("fa-minus btnCollapseTotal");
       tableAverage.column(0).visible(true);
-      tableAverage.column(1).visible(true);
       tableAverage.column(2).visible(true);
       tableAverage.column(3).visible(true);
-      tableAverage.column(4).visible(true);
-      tableAverage.column(5).visible(true);
+      tableAverage.column(10).visible(true);
     }
   );
   //Ocultar o visibilizar columnas
@@ -464,7 +571,7 @@ $(document).ready(function () {
       tableAverage.column(0).visible(false);
       tableAverage.column(2).visible(false);
       tableAverage.column(3).visible(false);
-      tableAverage.column(4).visible(false);
+      tableAverage.column(10).visible(false);
     }
   );
 
