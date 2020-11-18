@@ -1,4 +1,3 @@
-
 var flattenObject = function (ob) {
   var toReturn = {};
 
@@ -48,6 +47,18 @@ var defTableSettings = {
       var filas = json.data.map(function (v) {
         jsparsed = JSON.parse(v.json_log);
         flattened = flattenObject(jsparsed);
+        if (jsparsed.Inner[0].Inner[0] === undefined) {
+          alertify.error("Inner devolvio Undefine, se recargara la pagina");
+          setTimeout(function () {
+            location.reload();
+          }, 3000);
+        }
+        if (jsparsed.Inner[0] === undefined) {
+          alertify.error("Inner devolvio Undefine, se recargara la pagina");
+          setTimeout(function () {
+            location.reload();
+          }, 3000);
+        }
 
         return {
           canal: v.canal,
@@ -67,13 +78,11 @@ var defTableSettings = {
           tareaT21: jsparsed.Inner[0].Inner[1].Inner[0].tiempo,
           tareaT22: jsparsed.Inner[0].Inner[1].Inner[1].tiempo,
           tareaT23: jsparsed.Inner[0].Inner[1].Inner[2].tiempo,
-          
         };
-        
       });
       return filas;
     },
-    error: function (XMLHttpRequest, textStatus, errorThrown) { 
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
       console.log("XHR ERROR get_logs" + XMLHttpRequest.status);
     },
   },
@@ -250,43 +259,39 @@ $(document).ready(function () {
       alert(errMsg);
     },
   });
-  $("#total thead").on(
-    "click",
-    "button.btnExpandTotal",
-    function () {
-      $(this).toggleClass("fa-minus btnCollapseTotal");
-      table.column(4).visible(true);
-      table.column(5).visible(true);
-      table.column(12).visible(true);
-    }
-  );
-
-  $("#total thead").on(
-    "click",
-    "button.btnCollapseTotal",
-    function () {
-      table.column(4).visible(false);
-      table.column(5).visible(false);
-      table.column(6).visible(false);
-      table.column(7).visible(false);
-      table.column(8).visible(false);
-      table.column(9).visible(false);
-      table.column(10).visible(false);
-      table.column(11).visible(false);
-      table.column(12).visible(false);
-    }
-  );
-
-  $("#total thead,#average thead").on("click", "button.btnExpandTask", function () {
-    $(this).toggleClass("fa-minus btnCollapseTask");
-    table.column(6).visible(true);
-    table.column(7).visible(true);
-    table.column(11).visible(true);
-
-    tableAverage.column(4).visible(true);
-    tableAverage.column(5).visible(true);
-    tableAverage.column(9).visible(true);
+  $("#total thead").on("click", "button.btnExpandTotal", function () {
+    $(this).toggleClass("fa-minus btnCollapseTotal");
+    table.column(4).visible(true);
+    table.column(5).visible(true);
+    table.column(12).visible(true);
   });
+
+  $("#total thead").on("click", "button.btnCollapseTotal", function () {
+    table.column(4).visible(false);
+    table.column(5).visible(false);
+    table.column(6).visible(false);
+    table.column(7).visible(false);
+    table.column(8).visible(false);
+    table.column(9).visible(false);
+    table.column(10).visible(false);
+    table.column(11).visible(false);
+    table.column(12).visible(false);
+  });
+
+  $("#total thead,#average thead").on(
+    "click",
+    "button.btnExpandTask",
+    function () {
+      $(this).toggleClass("fa-minus btnCollapseTask");
+      table.column(6).visible(true);
+      table.column(7).visible(true);
+      table.column(11).visible(true);
+
+      tableAverage.column(4).visible(true);
+      tableAverage.column(5).visible(true);
+      tableAverage.column(9).visible(true);
+    }
+  );
 
   $("#total thead").on("click", "button.btnCollapseTask", function () {
     table.column(6).visible(false);
@@ -373,19 +378,18 @@ var defTableSettingsAverage = {
       columnTarea23 = $("#total").DataTable().column(10).data().sum();
       columnTarea3 = $("#total").DataTable().column(11).data().sum();
 
-
       var filas = json.data.slice(0, 1).map(function () {
         return {
           tiempo: columnTiempo / countRow,
           lectura: columnLectura / countRow,
           escritura: columnEscritura / countRow,
           tarea: columnTarea / countRow,
-          tarea1:columnTarea1 / countRow,
-          tarea2:columnTarea2 / countRow,
-          tarea21:columnTarea21 / countRow,
-          tarea22:columnTarea22 / countRow,
-          tarea23:columnTarea23 / countRow,
-          tarea3:columnTarea3 / countRow,
+          tarea1: columnTarea1 / countRow,
+          tarea2: columnTarea2 / countRow,
+          tarea21: columnTarea21 / countRow,
+          tarea22: columnTarea22 / countRow,
+          tarea23: columnTarea23 / countRow,
+          tarea3: columnTarea3 / countRow,
         };
       });
       return filas;
@@ -537,7 +541,7 @@ $(document).ready(function () {
     success: function (data) {
       /* localStorage.setItem("token", data.TOKEN); */
       localStorage.setItem("tokenr", data.TOKEN_REFRESH);
-     /*  token = data.TOKEN; */
+      /*  token = data.TOKEN; */
       tokenr = data.TOKEN_REFRESH;
       tableAverage = $("#average").DataTable(defTableSettingsAverage);
     },
@@ -545,7 +549,7 @@ $(document).ready(function () {
       alert(errMsg);
     },
   });
- //Ocultar o visibilizar columnas
+  //Ocultar o visibilizar columnas
   $("#total thead, #average thead").on(
     "click",
     "button.btnExpandTotal",
@@ -642,6 +646,9 @@ $(document).ready(function () {
   //#region Grafico Tarea 1,2,3
   $("#modalTask, body").on("shown.bs.modal", function (e) {
     //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
+    if (table.row(tr).data()["tareaT1"] === undefined) {
+      return null
+    }
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataTar1 = table.row(tr).data()["tareaT1"];
@@ -776,8 +783,10 @@ $(document).ready(function () {
   });
   //#endregion
   //#region Grafico Promedios
+
   $("#modalWindowAverage, body").on("shown.bs.modal", function (e) {
     //Captura la fila seleccionada y genera el grafico dependiendo de la seleccion
+    
     var clickedBtn = $(e.relatedTarget);
     var tr = $(clickedBtn).closest("tr");
     var dataLecAv = tableAverage.row(tr).data()["lectura"];
